@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BoviTrack — Início</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde-mata:#1F5130; --verde-pasto:#2F6B3A; --verde-brota:#5FA84A;
+    --amarelo:#F2B705; --ocre:#C98B2B; --azul:#2D7FA8;
+    --creme:#F6F1E7; --grafite:#1E2A22; --branco:#FFFFFF;
+    --borda:#E9E2D0; --muted:#6B746D;
+    --page-bg:#E4E0D4;
+    --f-title:'Sora','Segoe UI',system-ui,sans-serif;
+    --f-body:'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --page-bg:#0E1511; }
+  }
+  :root[data-theme="dark"]{ --page-bg:#0E1511; }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--page-bg);
+    font-family:var(--f-body);
+    color:var(--grafite);
+    display:flex;align-items:center;justify-content:center;
+    padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+  }
+
+  /* Moldura do celular */
+  .phone{
+    width:390px;height:820px;max-height:100%;
+    background:var(--creme);
+    border-radius:44px;
+    border:10px solid #111;
+    box-shadow:0 30px 70px rgba(0,0,0,.35);
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  @media (max-width:430px){
+    .phone{width:100%;height:100%;border:0;border-radius:0;box-shadow:none}
+  }
+
+  .status{
+    height:34px;padding:10px 22px 0;display:flex;justify-content:space-between;
+    font:600 13px var(--f-body);color:var(--grafite);flex-shrink:0;
+  }
+  .status .ic{display:flex;gap:6px;align-items:center}
+
+  .screen{flex:1;overflow-y:auto;padding:14px 20px 20px}
+  .screen::-webkit-scrollbar{display:none}
+
+  /* Cabeçalho */
+  .head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:6px}
+  .hi{font-size:14px;color:var(--muted);font-weight:500}
+  .farm{font:800 23px/1.15 var(--f-title);color:var(--grafite);letter-spacing:-.3px;margin-top:2px}
+  .trocar{
+    background:var(--branco);border:1px solid var(--borda);border-radius:999px;
+    padding:11px 18px;font:500 14px var(--f-body);color:var(--grafite);cursor:pointer;
+    transition:transform .15s;
+  }
+  .trocar:active{transform:scale(.95)}
+
+  /* Card principal */
+  .hero{
+    margin-top:20px;background:var(--verde-mata);color:var(--creme);
+    border-radius:28px;padding:22px 20px 20px;
+  }
+  .hero .lbl{font-size:14px;opacity:.85}
+  .big{display:flex;align-items:flex-end;gap:12px;margin-top:6px}
+  .pct{font:800 56px/1 var(--f-title);letter-spacing:-2px}
+  .cnt{font-size:14px;opacity:.85;line-height:1.25;padding-bottom:6px}
+  .bar{height:9px;border-radius:99px;background:rgba(255,255,255,.18);margin:16px 0 18px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--verde-brota);border-radius:99px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+  .cta{
+    width:100%;border:0;border-radius:99px;padding:17px;background:var(--ocre);color:var(--verde-mata);
+    font:800 17px var(--f-title);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:transform .15s,filter .15s;
+  }
+  .cta:active{transform:scale(.97);filter:brightness(.95)}
+
+  /* Métricas */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .stat{background:var(--branco);border:1px solid var(--borda);border-radius:22px;padding:14px 12px}
+  .stat b{display:block;font:800 30px/1 var(--f-title);color:var(--grafite)}
+  .stat span{display:block;font-size:13px;color:var(--muted);margin:8px 0 7px}
+  .tag{display:inline-block;padding:4px 11px;border-radius:99px;font:600 13px var(--f-body)}
+  .t-am{background:#FDF0BF;color:#7A5A00}
+  .t-rs{background:#FBDDD6;color:#8A2E17}
+  .t-az{background:#D9EAF3;color:#1B5878}
+
+  /* Lista */
+  .sec{display:flex;justify-content:space-between;align-items:baseline;margin:24px 0 12px}
+  .sec h2{font:800 20px var(--f-title);letter-spacing:-.2px}
+  .sec a{font-size:14px;color:var(--muted);text-decoration:none}
+  .item{
+    display:flex;align-items:center;gap:14px;background:var(--branco);border:1px solid var(--borda);
+    border-radius:22px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:transform .15s;
+  }
+  .item:active{transform:scale(.98)}
+  .dot{width:16px;height:16px;border-radius:50%;flex-shrink:0;border:3px solid}
+  .d-am{border-color:var(--amarelo);background:#FBD45A}
+  .d-vd{border-color:var(--verde-pasto);background:var(--verde-pasto)}
+  .item h3{font:800 18px var(--f-title);letter-spacing:-.2px}
+  .item p{font-size:14.5px;color:var(--muted);margin-top:2px}
+
+  /* Navegação inferior */
+  .nav{
+    flex-shrink:0;background:var(--branco);border-top:1px solid var(--borda);
+    display:flex;justify-content:space-around;padding:10px 4px calc(12px + env(safe-area-inset-bottom,0px));
+  }
+  .nav button{
+    background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:4px;
+    font:500 12.5px var(--f-body);color:var(--muted);cursor:pointer;padding:4px 10px;
+  }
+  .nav button.on{color:var(--verde-pasto);font-weight:600}
+  .nav svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  [hidden]{display:none!important}
+  .h1{font:800 30px var(--f-title);letter-spacing:-.5px;margin-top:6px}
+  .lblb{font-size:14px;color:var(--muted);margin:16px 0 8px}
+  .inp{width:100%;background:var(--branco);border:1px solid var(--borda);border-radius:22px;padding:18px 20px;font:400 18px var(--f-body);color:var(--grafite);outline:none}
+  .inp:focus{border-color:var(--verde-pasto)}
+  .chips{display:flex;gap:10px;margin:16px 0 18px;flex-wrap:wrap}
+  .chip{border:1px solid var(--borda);background:var(--branco);border-radius:99px;padding:13px 22px;font:500 15px var(--f-body);color:var(--grafite);cursor:pointer;transition:transform .15s}
+  .chip:active{transform:scale(.95)}
+  .chip.on{background:var(--verde-mata);color:var(--creme);border-color:var(--verde-mata)}
+  .row{justify-content:space-between}
+  .t-vd{background:#DCE9DC;color:var(--verde-mata)}
+  .vazio{text-align:center;color:var(--muted);padding:30px 0}
+  .dhead{display:flex;align-items:center;gap:18px;margin-top:20px}
+  .avatar{width:96px;height:96px;border-radius:50%;background:var(--verde-pasto);display:grid;place-items:center;flex-shrink:0}
+  .dhead .farm{font-size:26px}
+  .dhead .hi{margin:3px 0 6px}
+  .dhead .tag{font-style:normal}
+  .warn{background:#FDF0BF;border:1.5px solid var(--amarelo);border-radius:26px;padding:16px 20px;margin-bottom:14px}
+  .warn b{display:block;font:800 17px/1.25 var(--f-title)}
+  .warn span{font-size:14.5px;color:#7A5A00}
+  .card{background:var(--branco);border:1px solid var(--borda);border-radius:28px;padding:18px 20px;margin-bottom:14px}
+  .card .top{display:flex;justify-content:space-between;align-items:baseline}
+  .card h3,.line h3{font:700 17px var(--f-title)}
+  .card .top b{font:800 28px var(--f-title);letter-spacing:-.5px}
+  .bars{display:flex;gap:12px;align-items:flex-end;height:96px;margin-top:10px}
+  .bars i{flex:1;height:0;border-radius:10px;background:var(--verde-brota);transition:height 1s cubic-bezier(.2,.8,.2,1)}
+  .bars i.last{background:var(--verde-pasto)}
+  .line{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--branco);border:1px solid var(--borda);border-radius:30px;padding:20px;margin-bottom:12px}
+  .line span{font-size:14.5px;color:var(--muted);text-align:right}
+  .toprow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .lnk{font-size:14px;font-weight:600;color:var(--verde-pasto);text-decoration:none}
+  .warn,.line[data-t=san]{cursor:pointer}
+  .t-gr{background:#ECE7DA;color:#4A4F49}
+  .toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%) translateY(12px);background:var(--grafite);color:var(--creme);padding:12px 20px;border-radius:99px;font:500 14px var(--f-body);opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;z-index:5}
+  .toast.on{opacity:1;transform:translateX(-50%)}
+  .out{width:100%;background:var(--branco);border:1.5px solid var(--verde-mata);border-radius:99px;padding:17px;font:800 17px var(--f-title);color:var(--verde-mata);cursor:pointer;margin-top:6px}
+  .nota{font-size:14px;color:var(--muted);text-align:center;margin:16px 4px 8px}
+  .sum{background:var(--verde-mata);color:var(--creme);border-radius:28px;padding:20px 24px;display:flex;justify-content:space-between;margin-bottom:4px}
+  .sum b{display:block;font:800 44px/1 var(--f-title)}
+  .sum span{font-size:15px;opacity:.9}
+  .sum .r{text-align:right}
+  .vc .top{align-items:center}
+  .vc h3{font:800 21px var(--f-title)}
+  .vc p{font-size:14.5px;color:var(--muted);margin:10px 0 14px}
+  .vc .cta{margin-top:4px}
+  .idcard{background:var(--verde-mata);color:var(--creme);border-radius:28px;padding:20px;margin:16px 0 12px}
+  .idtop{display:flex;align-items:center;gap:16px}
+  .avatar.w{width:76px;height:76px;background:#fff}
+  .idtop small{font-size:13px;opacity:.8;display:block}
+  .uid{font:700 19px var(--f-title);letter-spacing:1.5px;margin-top:4px}
+  .idtags{display:flex;gap:8px;margin-top:14px}
+  .idtags .tag{font-size:12px;font-style:normal;padding:4px 10px}
+  .acts{display:flex;gap:12px;margin-bottom:14px}
+  .acts .cta,.acts .out{flex:1;margin:0;padding:14px;font-size:15px}
+  .card h4{font:700 17px var(--f-title);color:var(--verde-mata);margin-bottom:6px}
+  .fr{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--borda);font-size:14px}
+  .fr:last-child{border:0}
+  .fr span{color:var(--muted)}
+  .fr b{font-weight:500;text-align:right}
+  .bio{display:flex;gap:16px;align-items:center}
+  .bio>div:last-child{flex:1}
+  .foto{width:112px;height:112px;border-radius:16px;background:#E8EBD8;border:1px solid #D4DABF;display:grid;place-items:center;text-align:center;font-size:13px;color:var(--muted);flex-shrink:0}
+  .screen.map{padding:0;overflow:hidden;position:relative;background-color:#DFE9D0;background-image:linear-gradient(#CCDBBA 1.5px,transparent 1.5px),linear-gradient(90deg,#CCDBBA 1.5px,transparent 1.5px);background-size:30px 30px}
+  .mtop{position:absolute;left:14px;right:14px;top:14px;z-index:2}
+  .mpill{background:var(--branco);border-radius:99px;padding:18px 24px;font:800 19px var(--f-title);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .mtop .chips{margin:12px 0 0}
+  .mtop .chip{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .pin{position:absolute;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);background:var(--verde-pasto);cursor:pointer;animation:pop .4s both}
+  .pin.p{background:var(--amarelo);border:2.5px solid var(--ocre)}
+  @keyframes pop{from{transform:translate(-50%,-50%) scale(0)}}
+  .mbot{position:absolute;left:12px;right:12px;bottom:12px;background:var(--branco);border-radius:30px;padding:16px 18px 18px;z-index:2}
+  .leg{display:flex;justify-content:space-between;margin-bottom:14px}
+  .lg{display:flex;align-items:center;gap:8px;font:700 15px var(--f-title)}
+  .lg i{width:13px;height:13px;border-radius:50%;background:var(--verde-pasto)}
+  .lg i.p{background:var(--amarelo);border:2.5px solid var(--ocre)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status">
+    <span>1:03</span>
+    <span class="ic">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 4.5a10 10 0 0 1 14 0M3.5 7a6.5 6.5 0 0 1 9 0M6 9.5a3 3 0 0 1 4 0"/></svg>
+      <svg width="24" height="12" viewBox="0 0 24 12"><rect x="1" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="3" width="14" height="6" rx="1.5" fill="#5FA84A"/><rect x="22" y="4" width="1.6" height="4" rx=".8" fill="currentColor"/></svg>
+    </span>
+  </div>
+
+  <main class="screen" id="v-inicio">
+    <div class="head">
+      <div>
+        <div class="hi">Bom dia, Lara</div>
+        <div class="farm">Fazenda Boa Esperança</div>
+      </div>
+      <button class="trocar">Trocar</button>
+    </div>
+
+    <section class="hero">
+      <div class="lbl">Rebanho identificado hoje</div>
+      <div class="big">
+        <div class="pct">96%</div>
+        <div class="cnt">1.204 de 1.254<br>animais</div>
+      </div>
+      <div class="bar"><i id="fill"></i></div>
+      <button class="cta">Iniciar voo</button>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><b>8</b><span>Pendentes</span><em class="tag t-am" style="font-style:normal">verificar</em></div>
+      <div class="stat"><b>3</b><span>Alertas</span><em class="tag t-rs" style="font-style:normal">hoje</em></div>
+      <div class="stat"><b>2 h</b><span>Sincronizado</span><em class="tag t-az" style="font-style:normal">online</em></div>
+    </section>
+
+    <div class="sec"><h2>Atenção hoje</h2><a href="#">Ver todos</a></div>
+
+    <div class="item"><span class="dot d-am"></span><div><h3>Nelore #0412</h3><p>Vacina de aftosa vence em 5 dias</p></div></div>
+    <div class="item"><span class="dot d-am"></span><div><h3>Nelore #0877</h3><p>Sem registro de peso há 60 dias</p></div></div>
+    <div class="item"><span class="dot d-vd"></span><div><h3>Pasto Sul</h3><p>Último voo hoje, 06:40 · 5 pendentes</p></div></div>
+  </main>
+
+  <main class="screen map" id="v-mapa" hidden>
+    <div class="mtop"><div class="mpill">Pasto Sul · Voo 2</div>
+      <div class="chips" id="m-chips"><button class="chip on" data-f="todos">Todos</button><button class="chip" data-f="ident">Identificados</button><button class="chip" data-f="pend">Pendentes</button></div></div>
+    <div id="pins"></div>
+    <div class="mbot"><div class="leg"><span class="lg"><i></i>1.204 identificados</span><span class="lg"><i class="p"></i>8 pendentes</span></div><button class="cta" id="m-ver">Verificar pendentes</button></div>
+  </main>
+
+  <main class="screen" id="v-vacinas" hidden>
+    <div class="toprow"><button class="trocar" id="vc-back">Voltar</button><span class="hi" id="vc-id" style="font-size:13px"></span></div>
+    <h1 class="h1" style="margin:22px 0 16px">Vacinas</h1>
+    <div class="sum"><div><b id="vc-f"></b><span>faltantes ou a vencer</span></div><div class="r"><b id="vc-o"></b><span>em dia</span></div></div>
+    <div class="chips" id="vc-chips"><button class="chip on" data-f="falt">Faltantes</button><button class="chip" data-f="ok">Em dia</button><button class="chip" data-f="todas">Todas</button></div>
+    <div id="vc-lista"></div>
+    <button class="out" id="vc-ag">Agendar com o veterinário</button>
+    <p class="nota">Calendário conforme orientação do veterinário e do órgão sanitário estadual.</p>
+  </main>
+
+  <main class="screen" id="v-ficha" hidden>
+    <div class="toprow"><button class="trocar" id="fc-back">Voltar</button><span class="hi" style="font-size:13px">Ficha completa</span></div>
+    <div class="idcard">
+      <div class="idtop"><div class="avatar w"><svg viewBox="0 0 24 24" width="36" height="36"><path d="M12 22s8-7 8-12.5A8 8 0 0 0 4 9.5C4 15 12 22 12 22z" fill="#2F6B3A"/><circle cx="12" cy="9.5" r="3" fill="#F2B705"/></svg></div><div><small>ID único do indivíduo</small><div class="uid" id="fc-id"></div></div></div>
+      <div class="idtags"><em class="tag t-vd">Identificada por focinho</em><em class="tag t-am">1 alerta</em></div>
+    </div>
+    <div class="acts"><button class="cta" id="fc-pdf">Exportar PDF</button><button class="out" id="fc-sh">Compartilhar</button></div>
+    <div id="fc-body"></div>
+  </main>
+  <div class="toast" id="toast"></div>
+
+  <!-- RESERVA: tela Rebanho -->
+  <main class="screen" id="v-rebanho" hidden>
+    <h1 class="h1" style="margin-top:14px">Rebanho</h1>
+    <div class="lblb">Buscar por número ou brinco</div>
+    <input class="inp" id="q" placeholder="Ex.: 0412" inputmode="numeric" autocomplete="off">
+    <div class="chips" id="r-chips">
+      <button class="chip on" data-f="todos">Todos</button>
+      <button class="chip" data-f="pendentes">Pendentes</button>
+      <button class="chip" data-f="alertas">Alertas</button>
+    </div>
+    <div id="lista"></div>
+  </main>
+
+  <!-- RESERVA: tela Detalhe do animal -->
+  <main class="screen" id="v-detalhe" hidden>
+    <div class="toprow"><button class="trocar" id="voltar">Voltar</button><a href="#" class="lnk" id="ficha">Ficha completa ›</a></div>
+    <div class="dhead">
+      <div class="avatar"><svg viewBox="0 0 24 24" width="46" height="46"><path d="M12 22s8-7 8-12.5A8 8 0 0 0 4 9.5C4 15 12 22 12 22z" fill="#fff"/><circle cx="12" cy="9.5" r="3" fill="#F2B705"/></svg></div>
+      <div><div class="farm" id="d-nome"></div><div class="hi" id="d-sub"></div><em class="tag t-vd" id="d-tag"></em></div>
+    </div>
+    <div class="chips" id="d-tabs">
+      <button class="chip on" data-t="resumo">Resumo</button>
+      <button class="chip" data-t="san">Sanitário</button>
+      <button class="chip" data-t="peso">Peso</button>
+    </div>
+    <div class="warn" id="d-warn"><b id="d-alert"></b><span id="d-cta"></span></div>
+    <div class="card dc" data-t="peso">
+      <div class="top"><h3>Peso</h3><b id="d-peso"></b></div>
+      <div class="bars" id="d-bars"></div>
+    </div>
+    <div class="line dc" data-t="san"><h3>Sanitário</h3><span>em dia</span></div>
+    <div class="line dc" data-t="rep"><h3>Reprodução</h3><span id="d-rep"></span></div>
+  </main>
+
+  <nav class="nav" id="nav">
+    <button class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+    <button><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Mapa</button>
+    <button><svg viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Rebanho</button>
+    <button><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10.3 20a2 2 0 0 0 3.4 0"/></svg>Alertas</button>
+    <button><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Mais</button>
+  </nav>
+</div>
+
+<script>
+  // Anima a barra de progresso até 96%
+  setTimeout(function(){ document.getElementById('fill').style.width = '96%'; }, 200);
+  // ===== Dados de exemplo do rebanho =====
+  var A = [
+    {id:'0412', s:'Fêmea', kg:438, st:'alerta', idade:'3 anos', pasto:'Pasto Sul',   h:'06:42', w:[360,385,405,422,438], alert:'Vacina de aftosa vence em 5 dias', cta:'Toque para agendar'},
+    {id:'0413', s:'Macho', kg:512, st:'ok',     idade:'4 anos', pasto:'Pasto Norte', h:'06:51', w:[470,481,492,503,512]},
+    {id:'0877', s:'Fêmea', kg:401, st:'alerta', idade:'5 anos', pasto:'Pasto Sul',   h:'06:38', w:[430,422,415,408,401], alert:'Sem registro de peso há 60 dias', cta:'Toque para registrar'},
+    {id:'0901', s:'Fêmea', kg:389, st:'ok',     idade:'2 anos', pasto:'Pasto Leste', h:'06:47', w:[350,360,372,381,389]},
+    {id:null,   pasto:'Pasto Sul'} // animal ainda sem identificação
+  ];
+  var prev = 'rebanho', filt = 'todos', q = '', cur = A[0], vf = 'falt', mf = 'todos';
+  function $(s){ return document.querySelector(s); }
+
+  // ===== Troca de telas (on = índice da aba ativa na barra inferior) =====
+  function show(v, on){
+    ['inicio','mapa','rebanho','detalhe','vacinas','ficha'].forEach(function(x){ $('#v-'+x).hidden = (x !== v); });
+    $('#v-'+v).scrollTop = 0;
+    if (on === undefined) on = ({inicio:0, mapa:1})[v];
+    if (on === undefined) on = 2;
+    document.querySelectorAll('#nav button').forEach(function(b,i){ b.classList.toggle('on', i === on); });
+  }
+
+  // ===== Lista do rebanho (com busca e filtros) =====
+  function lista(){
+    var h = '';
+    A.forEach(function(a){
+      var st = a.id ? a.st : 'pend';
+      if (filt === 'pendentes' && st !== 'pend') return;
+      if (filt === 'alertas' && st !== 'alerta') return;
+      if (q && (!a.id || a.id.indexOf(q) < 0)) return;
+      var t = {alerta:['t-am','alerta'], ok:['t-vd','em dia'], pend:['t-rs','pendente']}[st];
+      h += '<div class="item row"' + (a.id ? ' data-id="'+a.id+'"' : '') + '><div><h3>' +
+           (a.id ? 'Nelore #'+a.id : 'Sem identificação') + '</h3><p>' +
+           (a.id ? a.s+' · '+a.kg+' kg' : 'Visto no '+a.pasto) + '</p></div><em class="tag '+t[0]+'" style="font-style:normal">'+t[1]+'</em></div>';
+    });
+    $('#lista').innerHTML = h || '<p class="vazio">Nenhum animal encontrado</p>';
+  }
+  function setF(f){
+    filt = f;
+    document.querySelectorAll('#r-chips .chip').forEach(function(c){ c.classList.toggle('on', c.dataset.f === f); });
+    lista();
+  }
+
+  // ===== Detalhe do animal =====
+  function tab(t){
+    document.querySelectorAll('#d-tabs .chip').forEach(function(c){ c.classList.toggle('on', c.dataset.t === t); });
+    document.querySelectorAll('#v-detalhe .dc').forEach(function(c){
+      c.style.display = (t === 'resumo' || c.dataset.t === t) ? '' : 'none';
+    });
+  }
+  function abrir(id, from){
+    var a = A.filter(function(x){ return x.id === id; })[0];
+    if (!a) return;
+    prev = from || 'rebanho'; cur = a;
+    $('#d-nome').textContent = 'Nelore #' + a.id;
+    $('#d-sub').textContent = a.s + ' · ' + a.idade + ' · ' + a.pasto;
+    $('#d-tag').textContent = 'identificada hoje, ' + a.h;
+    $('#d-peso').textContent = a.kg + ' kg';
+    $('#d-warn').hidden = !a.alert;
+    $('#d-alert').textContent = a.alert || '';
+    $('#d-cta').textContent = a.cta || '';
+    $('#d-rep').textContent = a.s === 'Fêmea' ? 'prenhe · parto previsto 18/01' : 'reprodutor ativo';
+    var mn = Math.min.apply(null, a.w) * 0.8, mx = Math.max.apply(null, a.w);
+    $('#d-bars').innerHTML = a.w.map(function(p,i){
+      return '<i class="'+(i === 4 ? 'last' : '')+'" data-h="'+Math.round((p-mn)/(mx-mn)*100)+'"></i>';
+    }).join('');
+    tab('resumo');
+    show('detalhe');
+    setTimeout(function(){
+      document.querySelectorAll('#d-bars i').forEach(function(b){ b.style.height = b.dataset.h + '%'; });
+    }, 60);
+  }
+
+  // ===== Eventos =====
+  $('#lista').addEventListener('click', function(e){
+    var it = e.target.closest('.item[data-id]');
+    if (it) abrir(it.dataset.id, 'rebanho');
+  });
+  $('#q').addEventListener('input', function(){ q = this.value.trim(); lista(); });
+  $('#r-chips').addEventListener('click', function(e){ if (e.target.dataset.f) setF(e.target.dataset.f); });
+  $('#d-tabs').addEventListener('click', function(e){ if (e.target.dataset.t) tab(e.target.dataset.t); });
+  $('#voltar').addEventListener('click', function(){ show(prev); });
+
+  // Tela Início: cards de atenção e "Ver todos"
+  var itens = document.querySelectorAll('#v-inicio .item');
+  itens[0].addEventListener('click', function(){ abrir('0412', 'inicio'); });
+  itens[1].addEventListener('click', function(){ abrir('0877', 'inicio'); });
+  itens[2].addEventListener('click', function(){ mapa(); show('mapa', 1); });
+  $('#v-inicio .sec a').addEventListener('click', function(e){ e.preventDefault(); setF('alertas'); show('rebanho'); });
+
+  // Barra inferior
+  var nb = document.querySelectorAll('#nav button');
+  nb[0].addEventListener('click', function(){ show('inicio'); });
+  nb[2].addEventListener('click', function(){ setF('todos'); show('rebanho'); });
+  nb[3].addEventListener('click', function(){ setF('alertas'); show('rebanho', 3); });
+  nb[1].addEventListener('click', function(){ mapa(); show('mapa'); });
+
+  function toast(m){ var t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function(){ t.classList.remove('on'); }, 1800); }
+  function chipsOn(sel, key, val){ document.querySelectorAll(sel+' .chip').forEach(function(c){ c.classList.toggle('on', c.dataset[key] === val); }); }
+  function btid(a){ return 'BT-MT-' + a.id + '-' + ['7F3A9C','2B81D4','9C05E1','4A7F36'][A.indexOf(a)]; }
+
+  // ===== Mapa do voo =====
+  var D = [[17.5,30.7,0],[40.1,26.8,0],[55.2,32,0],[35,37.2,0],[75.3,39.8,0],[85.3,28.1,0],[47.6,50.3,0],[77.8,54.2,0],[20,63.3,0],[25,47.6,1],[65.2,61.9,1]];
+  function mapa(){
+    $('#pins').innerHTML = D.map(function(d){
+      if ((mf === 'ident' && d[2]) || (mf === 'pend' && !d[2])) return '';
+      return '<i class="pin'+(d[2] ? ' p' : '')+'" style="left:'+d[0]+'%;top:'+d[1]+'%" data-p="'+d[2]+'"></i>';
+    }).join('');
+  }
+  $('#m-chips').addEventListener('click', function(e){ if (e.target.dataset.f){ mf = e.target.dataset.f; chipsOn('#m-chips','f',mf); mapa(); } });
+  $('#pins').addEventListener('click', function(e){ if (e.target.dataset.p) toast(e.target.dataset.p === '1' ? 'Pendente de verificação' : 'Animal identificado'); });
+  $('#m-ver').addEventListener('click', function(){ setF('pendentes'); show('rebanho'); });
+
+  // ===== Vacinas =====
+  var VAC = [{n:'Clostridioses',st:'late',u:'19/04',p:'19/10'},{n:'Aftosa',st:'soon',u:'05/05',p:'05/11'},{n:'Raiva',st:'none',u:'—',p:'a definir'},{n:'Brucelose',st:'ok',u:'15/08',p:'15/02'},{n:'Vermifugação',st:'ok',u:'20/09',p:'20/12'}];
+  function vacinas(){
+    var f = VAC.filter(function(v){ return v.st !== 'ok'; }).length, h = '';
+    $('#vc-f').textContent = f; $('#vc-o').textContent = VAC.length - f;
+    $('#vc-id').textContent = 'Nelore #' + cur.id + ' · ' + btid(cur);
+    var tg = {late:['t-rs','Atrasada há 12 dias'], soon:['t-am','Vence em 5 dias'], none:['t-gr','Sem registro'], ok:['t-vd','Em dia']};
+    VAC.forEach(function(v,i){
+      if ((vf === 'falt' && v.st === 'ok') || (vf === 'ok' && v.st !== 'ok')) return;
+      h += '<div class="card vc"><div class="top"><h3>'+v.n+'</h3><em class="tag '+tg[v.st][0]+'" style="font-style:normal">'+tg[v.st][1]+'</em></div><p>Última dose: '+v.u+' · Próxima: '+v.p+'</p>' +
+           (v.st !== 'ok' ? '<button class="cta" data-i="'+i+'">Registrar aplicação</button>' : '') + '</div>';
+    });
+    $('#vc-lista').innerHTML = h || '<p class="vazio">Nada por aqui</p>';
+  }
+  function abrirVac(){ vf = 'falt'; chipsOn('#vc-chips','f',vf); vacinas(); show('vacinas'); }
+  $('#vc-chips').addEventListener('click', function(e){ if (e.target.dataset.f){ vf = e.target.dataset.f; chipsOn('#vc-chips','f',vf); vacinas(); } });
+  $('#vc-lista').addEventListener('click', function(e){
+    var i = e.target.dataset.i;
+    if (i !== undefined){ var v = VAC[i]; v.st = 'ok'; v.u = 'hoje'; v.p = 'em 6 meses'; vacinas(); toast('Aplicação registrada'); }
+  });
+  $('#vc-ag').addEventListener('click', function(){ toast('Pedido enviado ao veterinário'); });
+  $('#vc-back').addEventListener('click', function(){ show('detalhe'); });
+  $('#d-warn').addEventListener('click', abrirVac);
+  $('#v-detalhe .line[data-t=san]').addEventListener('click', abrirVac);
+
+  // ===== Ficha completa =====
+  function ficha(){
+    var a = cur, f = a.s === 'Fêmea';
+    function R(l,v){ return '<div class="fr"><span>'+l+'</span><b>'+v+'</b></div>'; }
+    function S(t,b){ return '<div class="card"><h4>'+t+'</h4>'+b+'</div>'; }
+    $('#fc-id').textContent = btid(a);
+    var mn = Math.min.apply(null,a.w)*0.8, mx = Math.max.apply(null,a.w);
+    var bars = a.w.map(function(p,i){ return '<i class="'+(i === 4 ? 'last' : '')+'" style="height:'+Math.round((p-mn)/(mx-mn)*100)+'%"></i>'; }).join('');
+    var gmd = ((a.w[4]-a.w[0])/120).toFixed(2).replace('.',',');
+    $('#fc-body').innerHTML =
+      S('Identificação', R('ID BoviTrack',btid(a))+R('Brinco / SISBOV','076 000412 00831')+R('Nome / número','Nelore #'+a.id)+R('Raça','Nelore')+R('Sexo',a.s)+R('Nascimento',(2026-parseInt(a.idade))+' · '+a.idade)+R('Pelagem','Branca')+R('Origem','Nascid'+(f?'a':'o')+' na fazenda')+R('Mãe / Pai','#0198 / Atlas')+R('Lote · Pasto','Lote 3 · '+a.pasto)) +
+      S('Biometria do focinho', '<div class="bio"><div class="foto">foto do<br>focinho</div><div>'+R('Similaridade','98%')+R('Capturas','27')+'</div></div>'+R('Cadastro','12/03/2026 · voo automático')+R('Último avistamento','hoje, '+a.h)+R('Posição (GPS)','-16.0712, -57.6824')) +
+      S('Sanitário', R('Aftosa', a.id === '0412' ? 'vence em 5 dias' : 'em dia')+R('Brucelose','15/08/2026')+R('Vermifugação','20/09/2026')+R('Tratamentos','nenhum ativo')) +
+      S('Pesagem', '<div class="bars">'+bars+'</div>'+R('Último peso',a.kg+' kg')+R('Ganho médio diário',gmd+' kg/dia')+R('Última pesagem','02/10/2026')) +
+      S('Reprodução', f ? R('Situação','Prenhe')+R('Última cobertura','14/04/2026')+R('Parto previsto','18/01/2027')+R('Partos anteriores','1') : R('Situação','Reprodutor ativo')) +
+      S('Movimentação', R('Pasto atual',a.pasto)+R('Pasto anterior','Pasto Norte · 03/09/2026')+R('Transferências','2')) +
+      S('Observações', '<p class="vazio" style="padding:4px 0;text-align:left">Nenhuma observação registrada.</p>');
+  }
+  $('#ficha').addEventListener('click', function(e){ e.preventDefault(); ficha(); show('ficha'); });
+  $('#fc-back').addEventListener('click', function(){ show('detalhe'); });
+  $('#fc-pdf').addEventListener('click', function(){ toast('PDF gerado'); });
+  $('#fc-sh').addEventListener('click', function(){ toast('Link copiado'); });
+
+  lista();
+</script>
+</body>
+</html>
